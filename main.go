@@ -15,6 +15,7 @@ var (
 	flagShow     = flag.Bool("show", false, "show only filtered")
 	flagInternal = flag.Bool("int", false, "filter internal IPs")
 	flagCF       = flag.Bool("cf", false, "filter CloudFlare IPs")
+	flagS3       = flag.Bool("s3", false, "filter Amazone S3 IPs")
 	flagProcs    = flag.Int("procs", 10, "concurrency")
 )
 
@@ -61,6 +62,10 @@ func main() {
 
 	if *flagCF {
 		proc.filters = append(proc.filters, NewCFFilter())
+	}
+
+	if *flagS3 {
+		proc.filters = append(proc.filters, NewS3Filter())
 	}
 
 	process(proc)
