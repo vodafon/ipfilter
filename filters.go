@@ -47,6 +47,11 @@ func NewS3Filter(cidrs string) *BlockFilter {
 	return filterFromCidrs("s3.txt", cidrs)
 }
 
+func NewAkamaiFilter(cidrs string) *BlockFilter {
+	// https://raw.githubusercontent.com/SecOps-Institute/Akamai-ASN-and-IPs-List/refs/heads/master/akamai_ip_cidr_blocks_raw.lst
+	return filterFromCidrs("akamai.txt", cidrs)
+}
+
 func filterFromCidrs(fpath, cidrs string) *BlockFilter {
 	filt := BlockFilter{}
 	for _, cidr := range strings.Split(cidrs, "\n") {
