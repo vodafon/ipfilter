@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	_ "embed"
 	"testing"
 )
 
@@ -21,8 +22,8 @@ func TestHide(t *testing.T) {
 		w:    w,
 		show: false,
 	}
-	proc.filters = append(proc.filters, NewInternalFilter())
-	proc.filters = append(proc.filters, NewCFFilter())
+	proc.filters = append(proc.filters, NewInternalFilter(internalCidrs))
+	proc.filters = append(proc.filters, NewCFFilter(cloudflareCidrs))
 
 	for _, ip := range ips {
 		proc.Process(ip)
@@ -42,8 +43,8 @@ func TestShow(t *testing.T) {
 		w:    w,
 		show: true,
 	}
-	proc.filters = append(proc.filters, NewInternalFilter())
-	proc.filters = append(proc.filters, NewCFFilter())
+	proc.filters = append(proc.filters, NewInternalFilter(internalCidrs))
+	proc.filters = append(proc.filters, NewCFFilter(cloudflareCidrs))
 
 	for _, ip := range ips {
 		proc.Process(ip)

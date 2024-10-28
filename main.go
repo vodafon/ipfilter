@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	_ "embed"
 	"flag"
 	"fmt"
 	"io"
@@ -17,6 +18,13 @@ var (
 	flagCF       = flag.Bool("cf", false, "filter CloudFlare IPs")
 	flagS3       = flag.Bool("s3", false, "filter Amazone S3 IPs")
 	flagProcs    = flag.Int("procs", 10, "concurrency")
+
+	//go:embed ranges/internal.txt
+	internalCidrs string
+	//go:embed ranges/cloudflare.txt
+	cloudflareCidrs string
+	//go:embed ranges/s3.txt
+	s3Cidrs string
 )
 
 type Processor struct {
@@ -57,15 +65,15 @@ func main() {
 	}
 
 	if *flagInternal {
-		proc.filters = append(proc.filters, NewInternalFilter())
+		proc.filters = append(proc.filters, NewInternalFilter(internalCidrs))
 	}
 
 	if *flagCF {
-		proc.filters = append(proc.filters, NewCFFilter())
+		proc.filters = append(proc.filters, NewCFFilter(cloudflareCidrs))
 	}
 
 	if *flagS3 {
-		proc.filters = append(proc.filters, NewS3Filter())
+		proc.filters = append(proc.filters, NewS3Filter(s3Cidrs))
 	}
 
 	process(proc)
