@@ -18,6 +18,7 @@ var (
 	flagCF       = flag.Bool("cf", false, "filter CloudFlare IPs")
 	flagS3       = flag.Bool("s3", false, "filter Amazone S3 IPs")
 	flagAkamai   = flag.Bool("akamai", false, "filter Akamai IPs")
+	flagFastly   = flag.Bool("fastly", false, "filter Fastly IPs")
 	flagProcs    = flag.Int("procs", 10, "concurrency")
 
 	//go:embed ranges/internal.txt
@@ -28,6 +29,8 @@ var (
 	s3Cidrs string
 	//go:embed ranges/akamai.txt
 	akamaiCidrs string
+	//go:embed ranges/fastly.txt
+	fastlyCidrs string
 )
 
 type Processor struct {
@@ -81,6 +84,10 @@ func main() {
 
 	if *flagAkamai {
 		proc.filters = append(proc.filters, NewAkamaiFilter(akamaiCidrs))
+	}
+
+	if *flagFastly {
+		proc.filters = append(proc.filters, NewFastlyFilter(fastlyCidrs))
 	}
 
 	process(proc)

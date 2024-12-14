@@ -52,6 +52,11 @@ func NewAkamaiFilter(cidrs string) *BlockFilter {
 	return filterFromCidrs("akamai.txt", cidrs)
 }
 
+func NewFastlyFilter(cidrs string) *BlockFilter {
+	// https://api.fastly.com/public-ip-list
+	return filterFromCidrs("fastly.txt", cidrs)
+}
+
 func filterFromCidrs(fpath, cidrs string) *BlockFilter {
 	filt := BlockFilter{}
 	for _, cidr := range strings.Split(cidrs, "\n") {
